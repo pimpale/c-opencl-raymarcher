@@ -24,7 +24,7 @@
 
 #define FRAME_XSIZE 500
 #define FRAME_YSIZE 500
-#define SCALE 3
+#define SCALE 1
 
 // structs
 typedef struct {
@@ -245,7 +245,7 @@ void initialize() {
       "  return 0;"
       "}"
       "float within_sin(float3 loc) {"
-      "  return cos(loc.z/4) + cos(loc.x/5) + cos(loc.y/5) - 1;"
+      "  return sin(loc.z/4) + sin(loc.x/5) + sin(loc.y/5) - 1;"
       "}"
       "void kernel cast("
       "                 const unsigned int x_size,"
@@ -265,13 +265,13 @@ void initialize() {
       "     };"
       "  march_direction = normalize(quat_mul_vec3(march_direction, quat));"
       "  float3 loc = eye;"
-      "  for(int i = 0; i < 100; i++) {"
+      "  for(int i = 0; i < 1000; i++) {"
       "    float val = within_sin(loc);"
-      "    if(val > sin(time/100)) {"
-      "      color = float_to_color(val);"
+      "    if(val > 0) {"
+      "      color = float_to_color(i/100.0);"
       "      break;"
       "    }"
-      "    loc += 0.5f*march_direction;"
+      "    loc += march_direction;"
       "  }"
       "  /* set array value */"
       "  framebuffer[y*x_size + x] = color;"
