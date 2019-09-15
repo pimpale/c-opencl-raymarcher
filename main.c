@@ -185,7 +185,7 @@ cl_mem framebuffer_cl_mem;
 cl_kernel kernel;
 
 // represents the eye position
-cl_float3 eye = {0.0, 0.0, -100.0};
+cl_float3 eye = {0.0, 0.0, -10.0};
 // represents rotation
 cl_float4 rotation = {
     0.0,
@@ -237,8 +237,19 @@ void initialize() {
       "  unsigned int bluecomp = 127*(1+sin(hue+3.7));"
       "  return (redcomp << 16) + (greencomp << 8) + bluecomp;"
       "}"
-      "float distance_function(float3 loc) {"
-      "  return length(loc) - 5;"
+      "float distance_function(float3 z) {"
+      "  float scale = 2.0f;"
+      "  float offset = 5.0f;"
+      "  float r;"
+      "  int n = 0;"
+      "  while (n < 50) {"
+      "     if(z.x+z.y<0) z.xy = -z.yx;"
+      "     if(z.x+z.z<0) z.xz = -z.zx;"
+      "     if(z.y+z.z<0) z.zy = -z.yz;"
+      "     z = z*scale - offset*(scale-1.0f);"
+      "     n++;"
+      "  }"
+      "  return (length(z)) * pow(scale, 0.0f-n);"
       "}"
       "void kernel cast("
       "                 const unsigned int x_size,"
@@ -250,7 +261,7 @@ void initialize() {
       "                ) {"
       "  const float EPSILON = 0.01f;"
       "  const float MAX_DEPTH = 100;"
-      "  const unsigned int MAX_ITER = 100;"
+      "  const unsigned int MAX_ITER = 1000;"
       "  const unsigned int x = get_global_id(0);"
       "  const unsigned int y = get_global_id(1);"
       "  unsigned int color = 0x000000;"
