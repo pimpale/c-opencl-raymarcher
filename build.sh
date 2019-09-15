@@ -1,2 +1,3 @@
 #!/bin/sh
-cc -lm -lX11 -lOpenCL main.c
+cc -o renderer -lm -lX11 -lOpenCL main.c
+
