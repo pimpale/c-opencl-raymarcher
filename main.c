@@ -32,11 +32,13 @@ typedef struct {
   bool a;
   bool s;
   bool d;
+  bool q;
+  bool e;
+  bool x;
   bool Left;
   bool Right;
   bool Up;
   bool Down;
-  bool q;
   bool mouse_down;
   uint32_t mouse_x;
   uint32_t mouse_y;
@@ -130,6 +132,8 @@ void update_user_input(Display *display, UserInput *input) {
           INPUTONKEY(s, true)
           INPUTONKEY(d, true)
           INPUTONKEY(q, true)
+          INPUTONKEY(e, true)
+          INPUTONKEY(x, true)
           INPUTONKEY(Left, true)
           INPUTONKEY(Right, true)
           INPUTONKEY(Up, true)
@@ -146,6 +150,8 @@ void update_user_input(Display *display, UserInput *input) {
           INPUTONKEY(s, false)
           INPUTONKEY(d, false)
           INPUTONKEY(q, false)
+          INPUTONKEY(e, false)
+          INPUTONKEY(x, false)
           INPUTONKEY(Left, false)
           INPUTONKEY(Right, false)
           INPUTONKEY(Up, false)
@@ -284,7 +290,7 @@ void loop() {
     set_size(user_input.x_size/SCALE, user_input.y_size/SCALE);
   }
 
-  if (user_input.q) {
+  if (user_input.x) {
     terminate = true;
   }
 
@@ -299,27 +305,39 @@ void loop() {
   cl_float3 depth_axis = {0.0f, 0.0f, 1.0f};
 
   cl_float4 new_rotation = rotation;
-  if (user_input.Left) {
+  if (user_input.a) {
     quat q;
     quat_rotate(q, -rval, vertical_axis.s);
     cl_float4 current_rotation = new_rotation;
     quat_mul(new_rotation.s, current_rotation.s, q);
   }
-  if (user_input.Right) {
+  if (user_input.d) {
     quat q;
     quat_rotate(q, rval, vertical_axis.s);
     cl_float4 current_rotation = new_rotation;
     quat_mul(new_rotation.s, current_rotation.s, q);
   }
-  if (user_input.Up) {
+  if (user_input.w) {
     quat q;
     quat_rotate(q, rval, horizontal_axis.s);
     cl_float4 current_rotation = new_rotation;
     quat_mul(new_rotation.s, current_rotation.s, q);
   }
-  if (user_input.Down) {
+  if (user_input.s) {
     quat q;
     quat_rotate(q, -rval, horizontal_axis.s);
+    cl_float4 current_rotation = new_rotation;
+    quat_mul(new_rotation.s, current_rotation.s, q);
+  }
+  if (user_input.q) {
+    quat q;
+    quat_rotate(q, rval, depth_axis.s);
+    cl_float4 current_rotation = new_rotation;
+    quat_mul(new_rotation.s, current_rotation.s, q);
+  }
+  if (user_input.e) {
+    quat q;
+    quat_rotate(q, -rval, depth_axis.s);
     cl_float4 current_rotation = new_rotation;
     quat_mul(new_rotation.s, current_rotation.s, q);
   }
@@ -336,16 +354,16 @@ void loop() {
 
   // set eye location
   cl_float3 new_eye = eye;
-  if (user_input.w) {
+  if (user_input.Up) {
     vec3_add(new_eye.s, new_eye.s, rotated_depth_axis.s);
   }
-  if (user_input.s) {
+  if (user_input.Down) {
     vec3_sub(new_eye.s, new_eye.s, rotated_depth_axis.s);
   }
-  if (user_input.a) {
+  if (user_input.Left) {
     vec3_sub(new_eye.s, new_eye.s, rotated_horizontal_axis.s);
   }
-  if (user_input.d) {
+  if (user_input.Right) {
     vec3_add(new_eye.s, new_eye.s, rotated_horizontal_axis.s);
   }
   set_eye(new_eye);

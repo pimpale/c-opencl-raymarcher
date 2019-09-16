@@ -9,9 +9,10 @@ unsigned int float_to_color(float hue) {
   unsigned int bluecomp = 127*(1+sin(hue+3.7));
   return (redcomp << 16) + (greencomp << 8) + bluecomp;
 }
-float distance_function(float3 z) {
+
+float sierpinski(float3 z) {
   float scale = 2.0f;
-  float offset = 5.0f;
+  float offset = 20.0f;
   float r;
   int n = 0;
   while (n < 50) {
@@ -21,8 +22,13 @@ float distance_function(float3 z) {
      z = z*scale - offset*(scale-1.0f);
      n++;
   }
-  return (length(z)) * pow(scale, 0.0f-n);
+  return (length(z)) * pow(scale, 0.0f-n - 1);
 }
+
+float distance_function(float3 loc) {
+  return sierpinski(loc);
+}
+
 void kernel cast(
                  const unsigned int x_size,
                  const unsigned int y_size,
