@@ -15,7 +15,7 @@ float sierpinski(float3 z) {
   float offset = 20.0f;
   float r;
   int n = 0;
-  while (n < 50) {
+  while (n < 20) {
      if(z.x+z.y<0) z.xy = -z.yx;
      if(z.x+z.z<0) z.xz = -z.zx;
      if(z.y+z.z<0) z.zy = -z.yz;
@@ -37,7 +37,7 @@ void kernel cast(
                  const float4 quat,
                  const float time
                 ) {
-  const float EPSILON = 0.01f;
+  const float EPSILON = 0.1f;
   const float MAX_DEPTH = 100;
   const unsigned int MAX_ITER = 1000;
   const unsigned int x = get_global_id(0);
@@ -53,7 +53,7 @@ void kernel cast(
   for(int i = 0; i < MAX_ITER; i++) {
     float distance = distance_function(eye + depth*ray_direction);
     if(distance < EPSILON) {
-      color = float_to_color(i/10.0);
+      color = float_to_color(i/10);
       break;
     }
     depth += distance;

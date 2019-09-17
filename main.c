@@ -24,7 +24,7 @@
 
 #define FRAME_XSIZE 500
 #define FRAME_YSIZE 500
-#define SCALE 1
+#define SCALE 3
 
 // structs
 typedef struct {
@@ -249,6 +249,8 @@ char* read_file(char *filename) {
 
   char *str = malloc(length+1);
   fread(str, length, sizeof(char), fp);
+  // set null byte
+  str[length] = 0;
   fclose(fp);
   return str;
 }
