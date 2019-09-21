@@ -11,21 +11,22 @@ unsigned int float_to_color(float hue) {
 }
 
 bool inCube(float3 loc) {
-  uint3 uloc = abs((int3) {loc.x, loc.y, loc.z});
+  uint3 uloc = abs((int3) {loc.x+7, loc.y+7, loc.z+7});
   if(uloc.x % 41 < 5 && uloc.y % 41 < 5 && uloc.z %41 <5) {
     return true;
   }
   return false;
 }
 
+bool inSphere(float3 loc) {
+  return length(loc) < 1;
+}
+
 float3 bend(float3 loc, float3 vec, float time) {
-  float3 holeloc = (float3) {5,5,5};
+  float3 holeloc = (float3) {cos(time/10),sin(time/10),0};
   float dist = length(loc-holeloc);
-  float3 accel = -10.0f*normalize(loc-holeloc)/(dist*dist);
-  if(length(accel) > 0.1) {
-    //return (float3){0, 0, 0};
-  }
-  return vec + accel;
+  float3 accel = normalize(holeloc-loc)/(dist*dist);
+    return vec + accel;
 }
 
 void kernel cast(
@@ -50,8 +51,11 @@ void kernel cast(
   float3 loc = eye;
   for(int i = 0; i < MAX_ITER; i++) {
     ray_direction = bend(loc, ray_direction, time);
-    if(inCube(loc)) {
-      color = float_to_color(i/43.0);
+    if(inSphere(loc)) {
+      color = 0;
+      break;
+    } else if(inCube(loc)) {
+      color = float_to_color(i/100.0);
       break;
     }
     loc += ray_direction;
