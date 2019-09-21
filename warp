@@ -21,9 +21,9 @@ bool inCube(float3 loc) {
 float3 bend(float3 loc, float3 vec, float time) {
   float3 holeloc = (float3) {5,5,5};
   float dist = length(loc-holeloc);
-  float3 accel = 5.0f*normalize(loc-holeloc)/(dist*dist);
+  float3 accel = -10.0f*normalize(loc-holeloc)/(dist*dist);
   if(length(accel) > 0.1) {
-    return (float3){0, 0, 0};
+    //return (float3){0, 0, 0};
   }
   return vec + accel;
 }

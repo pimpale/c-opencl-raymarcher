@@ -357,17 +357,27 @@ void loop() {
 
   // set eye location
   cl_float3 new_eye = eye;
+  const float scalar = 0.5;
+
   if (user_input.Up) {
-    vec3_add(new_eye.s, new_eye.s, rotated_depth_axis.s);
+    vec3 displacement;
+    vec3_scale(displacement, rotated_depth_axis.s, scalar);
+    vec3_add(new_eye.s, new_eye.s, displacement);
   }
   if (user_input.Down) {
-    vec3_sub(new_eye.s, new_eye.s, rotated_depth_axis.s);
+    vec3 displacement;
+    vec3_scale(displacement, rotated_depth_axis.s, -scalar);
+    vec3_add(new_eye.s, new_eye.s, displacement);
   }
   if (user_input.Left) {
-    vec3_sub(new_eye.s, new_eye.s, rotated_horizontal_axis.s);
+    vec3 displacement;
+    vec3_scale(displacement, rotated_horizontal_axis.s, -scalar);
+    vec3_add(new_eye.s, new_eye.s, displacement);
   }
   if (user_input.Right) {
-    vec3_add(new_eye.s, new_eye.s, rotated_horizontal_axis.s);
+    vec3 displacement;
+    vec3_scale(displacement, rotated_horizontal_axis.s, scalar);
+    vec3_add(new_eye.s, new_eye.s, displacement);
   }
   set_eye(new_eye);
 
