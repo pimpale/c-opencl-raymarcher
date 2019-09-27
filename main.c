@@ -24,7 +24,7 @@
 
 #define FRAME_XSIZE 500
 #define FRAME_YSIZE 500
-#define SCALE 3
+#define SCALE 5
 #define REV_CONTROL false
 
 // structs

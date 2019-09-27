@@ -23,10 +23,12 @@ bool inSphere(float3 loc) {
 }
 
 float3 bend(float3 loc, float3 vec, float time) {
-  float3 holeloc = (float3) {cos(time/10),sin(time/10),0};
-  float dist = length(loc-holeloc);
-  float3 accel = normalize(holeloc-loc)/(dist*dist);
-    return vec + accel;
+  //float3 holeloc = (float3) {cos(time/10),sin(time/10),0};
+  //float dist = length(loc-holeloc);
+  //float3 accel = normalize(holeloc-loc)/(dist*dist);
+  // faster
+  float3 accel = normalize(loc)/pow(length(loc),3);
+  return vec + accel;
 }
 
 void kernel cast(
@@ -38,7 +40,7 @@ void kernel cast(
                  const float time
                 ) {
   const float EPSILON = 0.1f;
-  const unsigned int MAX_ITER = 1000;
+  const unsigned int MAX_ITER = 100;
   const unsigned int x = get_global_id(0);
   const unsigned int y = get_global_id(1);
   unsigned int color = 0x000000;
@@ -51,10 +53,7 @@ void kernel cast(
   float3 loc = eye;
   for(int i = 0; i < MAX_ITER; i++) {
     ray_direction = bend(loc, ray_direction, time);
-    if(inSphere(loc)) {
-      color = 0;
-      break;
-    } else if(inCube(loc)) {
+    if(inCube(loc)) {
       color = float_to_color(i/100.0);
       break;
     }
