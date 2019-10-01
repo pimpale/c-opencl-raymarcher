@@ -19,7 +19,7 @@ bool inCube(float3 loc) {
 }
 
 bool inSphere(float3 loc) {
-  return length(loc) < 1;
+  return length(loc) < 1.5;
 }
 
 float3 bend(float3 loc, float3 vec, float time) {
@@ -40,7 +40,7 @@ void kernel cast(
                  const float time
                 ) {
   const float EPSILON = 0.1f;
-  const unsigned int MAX_ITER = 100;
+  const unsigned int MAX_ITER = 500;
   const unsigned int x = get_global_id(0);
   const unsigned int y = get_global_id(1);
   unsigned int color = 0x000000;
@@ -55,6 +55,9 @@ void kernel cast(
     ray_direction = bend(loc, ray_direction, time);
     if(inCube(loc)) {
       color = float_to_color(i/100.0);
+      break;
+    } else if(inSphere(loc)) {
+      color = 0x000000;
       break;
     }
     loc += ray_direction;
