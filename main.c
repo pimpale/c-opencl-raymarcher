@@ -381,19 +381,6 @@ void loop() {
   }
   set_eye(new_eye);
 
-  /* FOR SPINNING IN A CIRCLE AROUND ORIGIN */
-#ifdef TESTING
-  {
-    cl_float4 test_rot;
-    quat_rotate(test_rot.s, current_time/100.0f, vertical_axis.s);
-    set_rotation(test_rot);
-
-    cl_float3 test_eye = {10*sinf(-current_time/100.0f), 0.0f, -10*cosf(-current_time/100.0f)};
-    set_eye(test_eye);
-  }
-#endif
-
-
   current_time++;
   clSetKernelArg(kernel, 5, sizeof(cl_float), &current_time);
 
