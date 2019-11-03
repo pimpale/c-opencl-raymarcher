@@ -1,12 +1,3 @@
-/*
- * README:
- * to compile issue
- * cc -lOpenCL -lX11 -lm main.c
- * to run, do
- * ./a.out
- * run
- */
-
 #include <math.h>
 #include <stdbool.h>
 #include <stdint.h>
