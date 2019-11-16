@@ -1,3 +1,3 @@
 #!/bin/sh
-cc -o clrenderer -lm -lX11 -lOpenCL main.c
+gcc -std=gnu99 -o clrenderer -lm -lX11 -lOpenCL main.c
 

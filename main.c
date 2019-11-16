@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <time.h>
 
-#include "CL/opencl.h"
+#include <CL/opencl.h>
 
 #include <X11/Xlib.h>
 #include <X11/Xos.h>
@@ -210,7 +210,7 @@ void set_size(uint32_t x, uint32_t y) {
   x_size = x;
   y_size = y;
   size_t point_count = x * y;
-  framebuffer = reallocarray(framebuffer, point_count, sizeof(uint32_t));
+  framebuffer = realloc(framebuffer, point_count * sizeof(uint32_t));
   if (framebuffer_cl_mem != NULL) {
     clReleaseMemObject(framebuffer_cl_mem);
   }

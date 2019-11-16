@@ -27,7 +27,7 @@ float3 bend(float3 loc, float3 vec, float time) {
   //float dist = length(loc-holeloc);
   //float3 accel = normalize(holeloc-loc)/(dist*dist);
   // faster
-  float3 accel = normalize(loc)/pow(length(loc),3);
+  float3 accel = loc/pow(length(loc),4);
   return vec + accel;
 }
 
