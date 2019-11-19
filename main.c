@@ -257,14 +257,13 @@ void initialize(char* filepath) {
   if (ret != CL_SUCCESS) {
     fprintf(stderr, "failed to build program: %d\n", ret);
     if (ret == CL_BUILD_PROGRAM_FAILURE) {
-      fprintf(stderr, "compilation error\n");
       size_t length = !NULL;
       clGetProgramBuildInfo(program, device, CL_PROGRAM_BUILD_LOG, 0, NULL,
                             &length);
       char *buffer = malloc(length);
       clGetProgramBuildInfo(program, device, CL_PROGRAM_BUILD_LOG, length,
                             buffer, NULL);
-      fprintf(stderr, buffer);
+      fprintf(stderr, "compilation error:\n%s\n", buffer);
       free(buffer);
     }
     exit(1);
