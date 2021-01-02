@@ -12,22 +12,25 @@ unsigned int float_to_color(float hue) {
 
 bool inCube(float3 loc) {
   uint3 uloc = abs((int3) {loc.x+7, loc.y+7, loc.z+7});
-  if(uloc.x % 41 < 5 && uloc.y % 41 < 5 && uloc.z %41 <5) {
-    return true;
-  }
-  return false;
+  return uloc.x % 41 < 5 && uloc.y % 41 < 5 && uloc.z %41 <5;
 }
 
 bool inSphere(float3 loc) {
-  return length(loc) < 1.5;
+  return length(loc) < 1;
 }
+
+bool inDisk(float3 loc) {
+  return (loc.y < 0.2 && loc.y > -0.2) && length(loc.xz) < 10;
+}
+
 
 float3 bend(float3 loc, float3 vec, float time) {
   //float3 holeloc = (float3) {cos(time/10),sin(time/10),0};
   //float dist = length(loc-holeloc);
   //float3 accel = normalize(holeloc-loc)/(dist*dist);
   // faster
-  float3 accel = loc/pow(length(loc),4);
+  float dist = length(loc);
+  float3 accel = loc/(dist*dist*dist*dist*100);
   return vec + accel;
 }
 

@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include <stdio.h>
 
+#define CL_TARGET_OPENCL_VERSION 220
 #include <CL/opencl.h>
 
 #include <X11/Xlib.h>
@@ -297,42 +298,42 @@ void loop() {
   cl_float3 depth_axis = {0.0f, 0.0f, 1.0f};
 
   cl_float4 new_rotation = rotation;
-  if (user_input.a) {
+  if (user_input.Left) {
     quat q;
     quat_rotate(q, -rval, vertical_axis.s);
     cl_float4 current_rotation = new_rotation;
     quat_mul(new_rotation.s, current_rotation.s, q);
   }
-  if (user_input.d) {
+  if (user_input.Right) {
     quat q;
     quat_rotate(q, rval, vertical_axis.s);
     cl_float4 current_rotation = new_rotation;
     quat_mul(new_rotation.s, current_rotation.s, q);
   }
-  if (user_input.w) {
+  if (user_input.Up) {
     quat q;
     quat_rotate(q, rval, horizontal_axis.s);
     cl_float4 current_rotation = new_rotation;
     quat_mul(new_rotation.s, current_rotation.s, q);
   }
-  if (user_input.s) {
+  if (user_input.Down) {
     quat q;
     quat_rotate(q, -rval, horizontal_axis.s);
     cl_float4 current_rotation = new_rotation;
     quat_mul(new_rotation.s, current_rotation.s, q);
   }
-  if (user_input.q) {
-    quat q;
-    quat_rotate(q, rval, depth_axis.s);
-    cl_float4 current_rotation = new_rotation;
-    quat_mul(new_rotation.s, current_rotation.s, q);
-  }
-  if (user_input.e) {
-    quat q;
-    quat_rotate(q, -rval, depth_axis.s);
-    cl_float4 current_rotation = new_rotation;
-    quat_mul(new_rotation.s, current_rotation.s, q);
-  }
+  // if (user_input.q) {
+  //   quat q;
+  //   quat_rotate(q, rval, depth_axis.s);
+  //   cl_float4 current_rotation = new_rotation;
+  //   quat_mul(new_rotation.s, current_rotation.s, q);
+  // }
+  // if (user_input.e) {
+  //   quat q;
+  //   quat_rotate(q, -rval, depth_axis.s);
+  //   cl_float4 current_rotation = new_rotation;
+  //   quat_mul(new_rotation.s, current_rotation.s, q);
+  // }
 
   set_rotation(new_rotation);
 
@@ -348,24 +349,34 @@ void loop() {
   cl_float3 new_eye = eye;
   const float scalar = 0.5;
 
-  if (user_input.Up) {
+  if (user_input.w) {
     vec3 displacement;
     vec3_scale(displacement, rotated_depth_axis.s, scalar);
     vec3_add(new_eye.s, new_eye.s, displacement);
   }
-  if (user_input.Down) {
+  if (user_input.s) {
     vec3 displacement;
     vec3_scale(displacement, rotated_depth_axis.s, -scalar);
     vec3_add(new_eye.s, new_eye.s, displacement);
   }
-  if (user_input.Left) {
+  if (user_input.a) {
     vec3 displacement;
     vec3_scale(displacement, rotated_horizontal_axis.s, -scalar);
     vec3_add(new_eye.s, new_eye.s, displacement);
   }
-  if (user_input.Right) {
+  if (user_input.d) {
     vec3 displacement;
     vec3_scale(displacement, rotated_horizontal_axis.s, scalar);
+    vec3_add(new_eye.s, new_eye.s, displacement);
+  }
+  if (user_input.q) {
+    vec3 displacement;
+    vec3_scale(displacement, rotated_vertical_axis.s, -scalar);
+    vec3_add(new_eye.s, new_eye.s, displacement);
+  }
+  if (user_input.e) {
+    vec3 displacement;
+    vec3_scale(displacement, rotated_vertical_axis.s, scalar);
     vec3_add(new_eye.s, new_eye.s, displacement);
   }
   set_eye(new_eye);
